@@ -128,7 +128,7 @@ Specifically: Easy to understand means the code is easy to read, minimizes the n
         Use @document comment if possiple
         Noise comments are bad
         Never leave code commented
-        
+
 1. Whitespace Is Nice Space
 1. Using design pattern as possible as we can
 ## Quote
@@ -160,7 +160,7 @@ In the simplified RocksDB, there are [2 major components](https://medium.com/roc
 To make sure data written to memtable is safe from process or server crash, we often enable the transaction log, which is essentially a redo log.
 
 A background thread that periodically do the “compaction”: merging these SSTables to a bigger SSTable.
-![img](https://cdn-images-1.medium.com/max/1600/1*kwil8vpzIga87KVRXRDvng.png)
+![img](images/lsm.png)
 
 # Data structure in RocksDB (except LSM)
 <!-- [Rocksdb](https://www.slideshare.net/meeeejin/rocksdb-detail) -->
@@ -317,4 +317,4 @@ index = (hash_a(string) + i * (hash_b(string) + 1)) % num_buckets
 
 They increase the size of the item array when it gets too full. To resize, we create a new hash table roughly half or twice as big as the current, and insert all non-deleted items into it.
 
-
+## Code 
