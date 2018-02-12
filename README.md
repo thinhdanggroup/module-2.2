@@ -279,22 +279,10 @@ Data is hashed : 232 times with md5
 ```
 
 
-## JNI port
-
-1. Compile
-
-```sh
-javac HelloWorld.java
-javah HelloWorld
-gcc -c ctest.c -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -fPIC
-gcc -o libctest.so -shared ctest.o
-java -Djava.library.path=. HelloWorld
-```
-
 
 # Hash Tables
 
-## Implement
+## Idea
 
 This hash function has two steps:
 1. Convert the string to a large integer
@@ -317,4 +305,12 @@ index = (hash_a(string) + i * (hash_b(string) + 1)) % num_buckets
 
 They increase the size of the item array when it gets too full. To resize, we create a new hash table roughly half or twice as big as the current, and insert all non-deleted items into it.
 
-## Code 
+## Implementation
+
+[Repo](https://github.com/jamesroutley/write-a-hash-table) is builded in [hashhash_table_C](hash_table_C) and fix some bugs. Compile C code with Makefile.
+
+JNI is implemented in [hash_table_JNI](hash_table_JNI). To compile JNI project, use `run.sh` script. With option:
+- `1`: compile java code and create C header.
+- `2`: compile C code and create lib for JNI.
+- `3`: only run program.
+- `4`: do all step above.
