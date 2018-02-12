@@ -1,32 +1,53 @@
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 public class main {
-
-//    public static ArrayList<String> ListFile(String directory) {
-//        ArrayList<String> listFile = new ArrayList<String>();
-//        File folder = new File(directory);
-//        File[] listOfFiles = folder.listFiles();
-//
-//        for (File file : listOfFiles) {
-//            if (file.isFile()) {
-//                listFile.add(file.getName());
-//                System.out.println(file.getName());
-//            }
-//        }
-//        return listFile;
-//    }
-
     public static void main(String[] args) throws IOException {
 //        System.out.println(ListFile("/home/thinda/Downloads/blogs"));
-        long startTime = System.currentTimeMillis();
-        String fileName = "/home/thinda/Downloads/blogs";
-        Dictionary a = new Dictionary(fileName);
-//        DictionaryBF a = new DictionaryBF(fileName);
-        String key ="programs";
-        System.out.println("Searching " + key + ": "+ a.contains(key));
-        System.out.println((System.currentTimeMillis() - startTime));
 
+        String fileName = "/home/antchil/Documents/blog_demo";
+        Dictionary dictionary = new DictionaryHashset(fileName);
+//        Dictionary dictionary = new DictionaryBF(fileName);
+
+
+
+        String[] keys = {"apple","java","mail","google","VNG","good","wonderful","nothing","haha","nice"};
+
+        int mean_duration = 0;
+        for (String key: keys){
+            // Calc time to find key in Dictionary
+            long startTime = System.nanoTime();
+            if (dictionary.contains(key)) {
+                System.out.println("Key " + key + " exist in database");
+            } else {
+                System.out.println(key + " not found");
+            }
+            long endTime = System.nanoTime();
+            long duration = endTime - startTime;
+
+            System.out.println("Duration: " +duration + " ns");
+            mean_duration += duration;
+        }
+        System.out.println("Mean duration: " + (mean_duration/keys.length) + " ns");
+
+        //        code for test a word
+        while (true) {
+            System.out.println("You want to search: ");
+            Scanner scanner = new Scanner(System.in);
+            String key = scanner.nextLine();
+            if (key.equals("1")){
+                break;
+            }
+            long startTime = System.nanoTime();
+            if (dictionary.contains(key)) {
+                System.out.println("Key exist in database");
+            } else {
+                System.out.println("Not found");
+            }
+            long endTime = System.nanoTime();
+            long duration = endTime - startTime;
+
+            System.out.println("Duration: " +duration + "ns");
+        }
     }
 }

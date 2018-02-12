@@ -17,30 +17,14 @@ import java.util.TimeZone;
  * @author Martin
  */
 public class lanterna {
-    public static void saveTrie(Trie trie, String path) throws IOException {
-        FileOutputStream fos = new FileOutputStream(path);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(trie);
-        oos.close();
-    }
-    public static Trie loadTrie(String path) throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream(path);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        Trie result = (Trie) ois.readObject();
-        ois.close();
-        return result;
-    }
     public static void main(String[] args) {
 //    public static void data(){
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory();
         Screen screen = null;
-        String fileName = "/home/antchil/MEGA/MEGAsync/data";
-        String pathTrie = "/home/antchil/MEGA/MEGAsync/trie.ser";
+        String fileName = "/home/antchil/Documents/blog_demo";
         try {
-//            long startTime = System.currentTimeMillis();
-//            final Trie trie = new Trie(fileName);
-            final Trie trie = loadTrie(pathTrie);
-//            System.out.println(System.currentTimeMillis() - startTime);
+            long startTime = System.currentTimeMillis();
+            final Trie trie = new Trie(fileName);
             screen = terminalFactory.createScreen();
             screen.startScreen();
             final WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
@@ -66,28 +50,6 @@ public class lanterna {
             final TextBox wordTxt = new TextBox()
                     .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.BEGINNING, GridLayout.Alignment.CENTER));
             contentPanel.addComponent(wordTxt);
-
-//            contentPanel.addComponent(new Label("Password Box (right aligned)"));
-//            contentPanel.addComponent(
-//                    new TextBox()
-//                            .setMask('*')
-//                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER)));
-
-//            contentPanel.addComponent(new Label("Read-only Combo Box (forced size)"));
-//            List<String> timezonesAsStrings = new ArrayList<String>();
-//            for(String id: TimeZone.getAvailableIDs()) {
-//                timezonesAsStrings.add(id);
-//            }
-//            ComboBox<String> readOnlyComboBox = new ComboBox<String>(timezonesAsStrings);
-//            readOnlyComboBox.setReadOnly(true);
-//            readOnlyComboBox.setPreferredSize(new TerminalSize(20, 1));
-//            contentPanel.addComponent(readOnlyComboBox);
-//
-//            contentPanel.addComponent(new Label("Editable Combo Box (filled)"));
-//            contentPanel.addComponent(
-//                    new ComboBox<String>("Item #1", "Item #2", "Item #3", "Item #4")
-//                            .setReadOnly(false)
-//                            .setLayoutData(GridLayout.createHorizontallyFilledLayoutData(1)));
 
             /*
             Some user interactions, like buttons, work by registering callback methods. In this example here, we're
@@ -143,8 +105,6 @@ public class lanterna {
             textGUI.addWindowAndWait(window);
 
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } finally {
             if (screen != null) {

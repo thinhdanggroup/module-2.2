@@ -11,12 +11,13 @@ public class Trie implements Serializable {
     public Trie(String filePath) throws IOException {
         root = new TrieNode();
         ArrayList<String> allFileDir = listAllFileDir(filePath);
-        int i =0 ;
+        int i = 0;
         for (String name : allFileDir) {
-            i+=1;
-            long startTime = System.currentTimeMillis();
+            if (i%100 == 0 ){
+                System.out.println("File number : " + i);
+            }
             saveWordFile(filePath + "/" + name);
-            System.out.println(i + " : " + (System.currentTimeMillis() - startTime));
+            i+=1;
         }
     }
 
@@ -28,7 +29,6 @@ public class Trie implements Serializable {
         for (File file : listOfFiles) {
             if (file.isFile()) {
                 listFile.add(file.getName());
-//                System.out.println(file.getName());
             }
         }
         return listFile;
@@ -44,14 +44,7 @@ public class Trie implements Serializable {
         List<String> store = new ArrayList<String>();
         while ((str = br.readLine()) != null) {
             if (str.contains(" ")) {
-                List<String> li = getWords(str);
-//                List<String> li_without_duplicate = new ArrayList<>(new HashSet<>(li));
-//                for (String a : li_without_duplicate) {
-//                    insert(a.toLowerCase());
-//                }
-            }
-            if ((i++)%100000==0) {
-                System.out.println("line : " + i);
+                getWords(str);
             }
 
         }
@@ -59,8 +52,7 @@ public class Trie implements Serializable {
     }
 
     // Get word from lines
-    public List<String> getWords(String text) {
-        List<String> words = new ArrayList<String>();
+    public void getWords(String text) {
         BreakIterator breakIterator = BreakIterator.getWordInstance();
 
         breakIterator.setText(text);
@@ -75,13 +67,11 @@ public class Trie implements Serializable {
                 }
             }
         }
-        return words;
     }
 
     // Inserts a word into the trie.
     public void insert(String word) {
         TrieNode node = root;
-//        System.out.println(word);
         for (int i = 0; i < word.length(); i++) {
             char currentChar = word.charAt(i);
 
@@ -90,7 +80,6 @@ public class Trie implements Serializable {
             }
             node = node.get(currentChar);
         }
-//        node.setEnd();
     }
 
     // search a prefix or whole key in trie and

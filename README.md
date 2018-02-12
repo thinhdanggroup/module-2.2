@@ -278,7 +278,38 @@ Data is hashed : 2046 times with xxhash
 Data is hashed : 232 times with md5
 ```
 
+# Dictionary
 
+## Introduce
+
+All source code is in [WordProcessing](WordProcessing) folder. Source code use Factory builder pattern with "Dictionary" interface.
+
+- DictionaryHashset: using `hashset` to store words.
+- DictionaryBF: using `bloom filter` to store words.
+
+Edit `filename` variable in source code to your directory, which contain `Blog Authorship Corpus`.
+
+## Performance
+
+Use case: I use a first 1000 data xml in dataset to build dictionary. After that. I search 10 words : [apple,java,mail,google,VNG,good,wonderful,nothing,haha,nice] and get mean of query time.
+
+1. Hashset(without bloom filter):
+
+        - Memery usage: 740MB
+        - Mean of query time: 13508656 ns
+
+2. Bloom Filter:
+
+        - Memory usage: 434MB
+        - Mean of query time: 43265 ns
+
+> `Bloom Filter` use memory less than hashset. Time to query a keyword is faster than hashset => Bloom Filter is better.
+
+# Predict text
+
+## Introduce
+
+All source code is in [PredictText](PredictText) folder. Code use lanterna to build UI. User input prefix, program will find that prefix in dictionary and recommend suffix.
 
 # Hash Tables
 
@@ -310,6 +341,7 @@ They increase the size of the item array when it gets too full. To resize, we cr
 [Repo](https://github.com/jamesroutley/write-a-hash-table) is builded in [hashhash_table_C](hash_table_C) and fix some bugs. Compile C code with Makefile.
 
 JNI is implemented in [hash_table_JNI](hash_table_JNI). To compile JNI project, use `run.sh` script. With option:
+
 - `1`: compile java code and create C header.
 - `2`: compile C code and create lib for JNI.
 - `3`: only run program.

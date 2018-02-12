@@ -17,35 +17,35 @@ JNIEXPORT jlong JNICALL Java_HashTable_ht_1new
 
 /*
  * Class:     HashTable
- * Method:    get_size
- * Signature: (J)I
- */
-JNIEXPORT jint JNICALL Java_HashTable_get_1size
-  (JNIEnv *, jobject, jlong);
-
-/*
- * Class:     HashTable
  * Method:    ht_insert
- * Signature: (JCC)V
+ * Signature: (JLjava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_HashTable_ht_1insert
-  (JNIEnv *, jobject, jlong, jchar, jchar);
+  (JNIEnv *, jobject, jlong, jstring, jstring);
 
 /*
  * Class:     HashTable
  * Method:    ht_search
- * Signature: (JC)C
+ * Signature: (JLjava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jchar JNICALL Java_HashTable_ht_1search
-  (JNIEnv *, jobject, jlong, jchar);
+JNIEXPORT jstring JNICALL Java_HashTable_ht_1search
+  (JNIEnv *, jobject, jlong, jstring);
 
 /*
  * Class:     HashTable
  * Method:    ht_delete
- * Signature: (JC)V
+ * Signature: (JLjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_HashTable_ht_1delete
-  (JNIEnv *, jobject, jlong, jchar);
+  (JNIEnv *, jobject, jlong, jstring);
+
+/*
+ * Class:     HashTable
+ * Method:    ht_del_hash_table
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_HashTable_ht_1del_1hash_1table
+  (JNIEnv *, jobject, jlong);
 
 #ifdef __cplusplus
 }

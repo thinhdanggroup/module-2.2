@@ -7,16 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class DictionaryNormal implements Dictionary {
+public class DictionaryHashset implements Dictionary {
     static HashSet<String> storage = new HashSet<String>();
     WordHandle wordHandle;
-    public DictionaryNormal(String filePath) throws IOException {
+    public DictionaryHashset(String filePath) throws IOException {
         wordHandle = new WordHandle();
         ArrayList<String> allFileDir= wordHandle.listAllFileDir(filePath);
-        int i=0;
-
         for (String name:  allFileDir) {
-            System.out.println(i++);
             insertWord(filePath +"/"+name);
         }
     }

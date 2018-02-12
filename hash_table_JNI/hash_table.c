@@ -2,8 +2,9 @@
 #include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "string.h"
 #include <math.h>
+#include <string.h>
+#include <ctype.h>
 #define HT_PRIME_1 5
 #define HT_PRIME_2 7
 #define HT_INITIAL_BASE_SIZE 5
@@ -83,13 +84,11 @@ ht_hash_table *ht_new_sized(const int base_size)
     return ht;
 }
 
+
 JNIEXPORT jlong JNICALL Java_HashTable_ht_1new(JNIEnv *env, jobject jobj)
 {
     ht_hash_table *my_struct = ht_new_sized(HT_INITIAL_BASE_SIZE);
     long lp = my_struct;
-    // printf("true addr : %ld\n", my_struct);
-    // printf("pointer addr : %ld\n", &my_struct);
-    // printf("true : %d\n", my_struct->base_size);
     return lp;
 }
 
@@ -169,31 +168,10 @@ static void ht_del_item(ht_item *i)
     free(i->value);
     free(i);
 }
-JNIEXPORT jint JNICALL Java_HashTable_get_1size(JNIEnv *env, jobject jobj, jlong addr)
+// Insert
+void ht_insert(ht_hash_table *ht, const char *key, const char *value)
 {
-    // printf("addr : %ld\n", addr);
-    ht_hash_table *ht;
-    ht = addr;
-    // printf("ht : %ld \n", ht);
-    // printf("&ht : %ld \n", &ht);
-    // printf("Haha : %d\n", ht->base_size);
-    return ht->base_size;
-}
-
-JNIEXPORT void JNICALL Java_HashTable_ht_1insert(JNIEnv *env, jobject jobj, jlong addr, jchar key_c, jchar value_c)
-{
-    // Init value
-    ht_hash_table *ht = rebuild_ht_hash_table(addr);
     const int load = ht->count * 100 / ht->size;
-
-    // long *key = malloc(sizeof(long));
-    // long *value = malloc(sizeof(long));
-    // *key = key_c;
-    // *value = value_c;
-    char *key, *value;
-    key = &key_c;
-    value = &value_c;
-
     if (load > 70)
     {
         ht_resize_up(ht);
@@ -211,55 +189,37 @@ JNIEXPORT void JNICALL Java_HashTable_ht_1insert(JNIEnv *env, jobject jobj, jlon
     ht->items[index] = item;
     ht->count++;
 }
-
-JNIEXPORT jchar JNICALL Java_HashTable_ht_1search(JNIEnv *env, jobject jobj, jlong addr, jchar key_c)
+// Search
+char *ht_search(ht_hash_table *ht, const char *key)
 {
-    ht_hash_table *ht = rebuild_ht_hash_table(addr);
-    printf("Search key %c\n", key_c);
-    char *key;
-    key = &key_c;
-
     int index = ht_get_hash(key, ht->size, 0);
-    // printf("itemz : %d\n", index);
     ht_item *item = ht->items[index];
     int i = 1;
     while (item != NULL)
     {
-        // printf("item : %d\n", index);
         if (item != &HT_DELETED_ITEM)
         {
             if (strcmp(item->key, key) == 0)
             {
-                printf("%c\n", *(item->value));
-                return *(item->value);
+                return item->value;
             }
             index = ht_get_hash(key, ht->size, i);
             item = ht->items[index];
-
-            if (i == 10)
-            {
-                printf("item is removed");
-                break;
-            }
             i++;
+            if (i == 10)
+                break;
         }
         else
         {
-            printf("item is removed");
             break;
         }
     }
-
-    return NULL;
+    return "NULL";
 }
 
-JNIEXPORT void JNICALL Java_HashTable_ht_1delete(JNIEnv *env, jobject jobj, jlong addr, jchar key_c)
+// DELETE
+void ht_delete(ht_hash_table *ht, const char *key)
 {
-    ht_hash_table *ht = rebuild_ht_hash_table(addr);
-
-    char *key;
-    key = &key_c;
-
     const int load = ht->count * 100 / ht->size;
     if (load < 10)
     {
@@ -270,7 +230,6 @@ JNIEXPORT void JNICALL Java_HashTable_ht_1delete(JNIEnv *env, jobject jobj, jlon
     int i = 1;
     while (item != NULL)
     {
-        printf("itemk : %d\n", index);
         if (item != &HT_DELETED_ITEM)
         {
             if (strcmp(item->key, key) == 0)
@@ -285,4 +244,47 @@ JNIEXPORT void JNICALL Java_HashTable_ht_1delete(JNIEnv *env, jobject jobj, jlon
         i++;
     }
     ht->count--;
+}
+
+JNIEXPORT void JNICALL Java_HashTable_ht_1insert(JNIEnv *env, jobject jobj, jlong addr, jstring key_c, jstring  value_c)
+{
+    // Init value
+    ht_hash_table *ht = rebuild_ht_hash_table(addr);
+    const char *key= (*env)->GetStringUTFChars(env,key_c,0);
+    const char *value= (*env)->GetStringUTFChars(env,value_c,0);
+
+	//need to release this string when done with it in order to
+	//avoid memory leak
+	
+    ht_insert(ht,key,value);
+    (*env)->ReleaseStringUTFChars(env, key_c, key);
+    (*env)->ReleaseStringUTFChars(env, value_c, value);
+}
+
+JNIEXPORT jchar JNICALL Java_HashTable_ht_1search(JNIEnv *env, jobject jobj, jlong addr, jstring key_c)
+{
+    ht_hash_table *ht = rebuild_ht_hash_table(addr);
+    char *key= (*env)->GetStringUTFChars(env,key_c,0);
+    printf("Search key %c\n", *key);
+    char * buf =ht_search(ht,key);
+    jstring jstr;
+    char temp[10];
+    strcpy(temp,buf);
+	
+	return (*env)->NewStringUTF(env, temp);
+
+}
+
+JNIEXPORT void JNICALL Java_HashTable_ht_1delete(JNIEnv *env, jobject jobj, jlong addr, jstring key_c)
+{
+    ht_hash_table *ht = rebuild_ht_hash_table(addr);
+    char *key= (*env)->GetStringUTFChars(env,key_c,0);
+    ht_delete(ht,key);
+}
+
+JNIEXPORT void JNICALL Java_HashTable_ht_1del_1hash_1table(JNIEnv *env, jobject jobj, jlong addr)
+{
+    ht_hash_table *ht = rebuild_ht_hash_table(addr);
+
+    ht_del_hash_table(ht);
 }
