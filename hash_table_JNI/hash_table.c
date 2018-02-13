@@ -103,7 +103,26 @@ static int ht_hash(const char *s, const int a, const int m)
     }
     return (int)hash;
 }
+static void ht_del_item(ht_item *i)
+{
+    free(i->key);
+    free(i->value);
+    free(i);
+}
 
+void ht_del_hash_table(ht_hash_table *ht)
+{
+    for (int i = 0; i < ht->size; i++)
+    {
+        ht_item *item = ht->items[i];
+        if (item != NULL && item != &HT_DELETED_ITEM)
+        {
+            ht_del_item(item);
+        }
+    }
+    free(ht->items);
+    free(ht);
+}
 static int ht_get_hash(
     const char *s, const int num_buckets, const int attempt)
 {
@@ -161,12 +180,6 @@ ht_hash_table *rebuild_ht_hash_table(long addr)
     ht_hash_table *ht;
     ht = addr;
     return ht;
-}
-static void ht_del_item(ht_item *i)
-{
-    free(i->key);
-    free(i->value);
-    free(i);
 }
 // Insert
 void ht_insert(ht_hash_table *ht, const char *key, const char *value)
@@ -265,7 +278,6 @@ JNIEXPORT jchar JNICALL Java_HashTable_ht_1search(JNIEnv *env, jobject jobj, jlo
 {
     ht_hash_table *ht = rebuild_ht_hash_table(addr);
     char *key= (*env)->GetStringUTFChars(env,key_c,0);
-    printf("Search key %c\n", *key);
     char * buf =ht_search(ht,key);
     jstring jstr;
     char temp[10];

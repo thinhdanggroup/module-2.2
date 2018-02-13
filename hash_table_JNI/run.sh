@@ -18,7 +18,9 @@ then
 echo Do all
 javac HashTable.java
 javah HashTable
-gcc -c demo.c -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -fPIC
-gcc -o libhash_table.so -shared demo.o
+echo ===============================================
+gcc -c hash_table.c -I/usr/lib/jvm/java-8-oracle/include -I/usr/lib/jvm/java-8-oracle/include/linux -fPIC
+gcc -o libhash_table.so -shared hash_table.o
+echo ===============================================
 java -Djava.library.path=. HashTable
 fi

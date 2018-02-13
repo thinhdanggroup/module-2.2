@@ -16,14 +16,22 @@ public class HashTable {
         HashTable HashTable = new HashTable();
         long addr = HashTable.ht_new(); /* (3) */
         // System.out.println("Size : " + HashTable.get_size(addr));
-        HashTable.ht_insert(addr, "1", "thinh");
-        System.out.println("Value : " + HashTable.ht_search(addr,"1"));
-        HashTable.ht_insert(addr, "2", "k");
-        System.out.println("Value : " + HashTable.ht_search(addr, "2"));
-        HashTable.ht_delete(addr, "1");
+        String key ="1";
+        HashTable.ht_insert(addr, key, "thinh");
+        System.out.println("Value "+key + " : " + HashTable.ht_search(addr,key));
 
-        String c = HashTable.ht_search(addr, "1");
-        System.out.println("Value : " + HashTable.ht_search(addr,"3"));
-        // System.out.println("Value : " + HashTable.ht_search(addr, '3'));
+        key="2";
+        HashTable.ht_insert(addr, key, "dang");
+        System.out.println("Value "+key + " : " + HashTable.ht_search(addr, key));
+
+        key="1";
+        HashTable.ht_delete(addr, key);
+        System.out.println("After delete 1 and search 1 : " + HashTable.ht_search(addr,key));
+
+        key="3";
+        System.out.println("Search key is not exist : " + HashTable.ht_search(addr,key));
+
+        HashTable.ht_del_hash_table(addr);
+        System.out.println("Search key 2 : " + HashTable.ht_search(addr, "2"));
     }
 }

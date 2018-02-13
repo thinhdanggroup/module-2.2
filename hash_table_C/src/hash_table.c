@@ -5,8 +5,8 @@
 #include "prime.h"
 #include <math.h>
 
-#define HT_PRIME_1 5
-#define HT_PRIME_2 7
+#define HT_PRIME_1 113
+#define HT_PRIME_2 127
 #define HT_INITIAL_BASE_SIZE 5
 static ht_item HT_DELETED_ITEM = {NULL, NULL};
 
@@ -145,8 +145,9 @@ char *ht_search(ht_hash_table *ht, const char *key)
     int index = ht_get_hash(key, ht->size, 0);
     ht_item *item = ht->items[index];
     int i = 1;
-    while (item != NULL)
+    while (item!=NULL)
     {
+        
         if (item != &HT_DELETED_ITEM)
         {
             if (strcmp(item->key, key) == 0)
@@ -155,9 +156,6 @@ char *ht_search(ht_hash_table *ht, const char *key)
             }
             index = ht_get_hash(key, ht->size, i);
             item = ht->items[index];
-            i++;
-            if (i == 10)
-                break;
         }
         else
         {

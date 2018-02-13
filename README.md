@@ -131,6 +131,7 @@ Specifically: Easy to understand means the code is easy to read, minimizes the n
 
 1. Whitespace Is Nice Space
 1. Using design pattern as possible as we can
+
 ## Quote
 
 1. `Code is like humor. When you **have** to explain it, it’s bad`
@@ -144,13 +145,17 @@ Specifically: Easy to understand means the code is easy to read, minimizes the n
 <!-- ## [Application](http://www.benstopford.com/2015/02/14/log-structured-merge-trees/) -->
 
 ## [What is LSM?](https://blog.acolyer.org/2014/11/26/the-log-structured-merge-tree-lsm-tree/)
-LSM : 
+
+LSM :
+
 - Provide low-cost indexing for a file experiencing a high rate of record inserts.
-- The LSM-tree is most useful in applications where index inserts are more common than finds that retrieve the entries. 
+- The LSM-tree is most useful in applications where index inserts are more common than finds that retrieve the entries.
 - An LSM-tree is composed of two or more tree-like component data structures.
 - The index entry for [an insert] is inserted into the memory resident C0 tree, after which it will in time migrate out to the C1 tree on disk; any search for an index entry will look first in C0 and then in C1.
 - The C0 tree as a result of an insert reaches a threshold size near the maximum allotted, an ongoing rolling merge process serves to delete some contiguous segment of entries from the C0 tree and merge it into the C1 tree on disk.
+
 ## [LSM with RocksDB](https://www.slideshare.net/meeeejin/rocksdb-detail)
+
 In the simplified RocksDB, there are [2 major components](https://medium.com/rocksdb-internals-a-beginners-guide/how-to-sound-like-you-know-rocksdb-1-a194db9e5070):
 
 - Memtable: a buffer that can temporarily host the incoming writes; memtable are normally sorted (in RocksDB, the default memtable implementation is [SkipList](https://www.geeksforgeeks.org/skip-list/)), but that is not required.
@@ -163,6 +168,7 @@ A background thread that periodically do the “compaction”: merging these SST
 ![img](images/lsm.png)
 
 # Data structure in RocksDB (except LSM)
+
 <!-- [Rocksdb](https://www.slideshare.net/meeeejin/rocksdb-detail) -->
 <!-- https://www.slideshare.net/HiveData/tech-talk-rocksdb-slides-by-dhruba-borthakur-haobo-xu-of-facebook -->
 
@@ -194,7 +200,7 @@ They trade in a small margin of error for considerably less memory footprint and
 
 1. How it work
 
-    ```
+    ```md
     Parameters of the Filter:
     1. Two Hash Functions: h1 and h2
     2. An array B with n buckets. The i-th bucket will be called B[i]
@@ -213,15 +219,17 @@ They trade in a small margin of error for considerably less memory footprint and
             Prepend y to L
             place x in B[h2(x)]
     ```
+
 1. [Example](http://www.lkozma.net/cuckoo_hashing_visualization/) 
 
 ### Count Min Sketch
 
 1. How it work
-    
+
     Use multiple arrays with different hash functions to compute the index.
-    
+
     When queried, return the minimum of the numbers the arrays. → Count-Min Sketch
+
 1. [Example](http://hkorte.github.io/slides/cmsketch/#/7)
 
 ### HyperLogLog
@@ -252,7 +260,8 @@ Real World Application of TRIE :
 # [Cryptographic and Non-Cryptographic Hash Functions](https://dadario.com.br/cryptographic-and-non-cryptographic-hash-functions/)
 
 The [main difference](https://www.quora.com/What-is-the-difference-between-cryptographic-and-noncryptographic-hashes) between cryptographic hashes and non cryptographic hashes is “uniqueness”. 
-Time to hash with cryptographic is longer than non-crytographic.
+
+Secondly, Time to hash with cryptographic is longer than non-crytographic.
 
 ## Benmark
 
@@ -263,15 +272,17 @@ Time to hash with cryptographic is longer than non-crytographic.
 ```sh
 pip install xxhash
 ``` 
+
 ### Run and config
 
 Using:
+
 - Arg1 : file hash
 - Arg2 : time to hash
 
 Example: `python benmark.py 419788.jpg`
 
-=> Output: 
+=> Output:
 
 ```sh
 Data is hashed : 2046 times with xxhash
@@ -309,7 +320,7 @@ Use case: I use a first 1000 data xml in dataset to build dictionary. After that
 
 ## Introduce
 
-All source code is in [PredictText](PredictText) folder. Code use lanterna to build UI. User input prefix, program will find that prefix in dictionary and recommend suffix.
+All source code is in [PredictText](PredictText) folder. Code use lanterna to build UI. User input prefix, program will find that prefix in dictionary and recommend suffix. My program is only support to predict text by prefix.
 
 # Hash Tables
 
@@ -317,6 +328,7 @@ All source code is in [PredictText](PredictText) folder. Code use lanterna to bu
 
 This hash function has two steps:
 1. Convert the string to a large integer
+
 ```python
 # "a" should be a prime number larger than the size of the alphabet
 for i = 0, 1, ..., string_len:
@@ -324,13 +336,14 @@ for i = 0, 1, ..., string_len:
 ```
 
 2. Reduce the size of the integer to a fixed range by taking its remainder mod m
+
 ```python
 hash = hash % num_buckets
 ```
 
 They use hash table to handle collisions using a technique called open addressing with double hashing.
 
-```
+```md
 index = (hash_a(string) + i * (hash_b(string) + 1)) % num_buckets
 ```
 
@@ -346,3 +359,12 @@ JNI is implemented in [hash_table_JNI](hash_table_JNI). To compile JNI project, 
 - `2`: compile C code and create lib for JNI.
 - `3`: only run program.
 - `4`: do all step above.
+
+# Hacker rank
+
+Challenges, which I pass:
+![pic](images/hacker.png)
+
+My dashboard
+
+![dash](images/hackerrank.png)
