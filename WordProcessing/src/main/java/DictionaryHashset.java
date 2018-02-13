@@ -13,7 +13,9 @@ public class DictionaryHashset implements Dictionary {
     public DictionaryHashset(String filePath) throws IOException {
         wordHandle = new WordHandle();
         ArrayList<String> allFileDir= wordHandle.listAllFileDir(filePath);
+        int i = 0;
         for (String name:  allFileDir) {
+            System.out.println("File " + i++);
             insertWord(filePath +"/"+name);
         }
     }

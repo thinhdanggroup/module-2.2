@@ -5,7 +5,7 @@ public class main {
     public static void main(String[] args) throws IOException {
 //        System.out.println(ListFile("/home/thinda/Downloads/blogs"));
 
-        String fileName = "/home/antchil/Documents/blog_demo";
+        String fileName = "/home/antchil/MEGA/MEGAsync/blogs";
         Dictionary dictionary = new DictionaryHashset(fileName);
 //        Dictionary dictionary = new DictionaryBF(fileName);
 

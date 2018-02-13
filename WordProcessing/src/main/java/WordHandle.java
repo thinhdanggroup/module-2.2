@@ -10,6 +10,7 @@ public class WordHandle {
         File[] listOfFiles = folder.listFiles();
 
         for (File file : listOfFiles) {
+
             if (file.isFile()) {
                 listFile.add(file.getName());
             }
